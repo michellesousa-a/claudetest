@@ -7,13 +7,19 @@ function App() {
 
   const addTodo = () => {
     if (inputValue.trim()) {
-      setTodos([...todos, { id: Date.now(), text: inputValue }])
+      setTodos([...todos, { id: Date.now(), text: inputValue, completed: false }])
       setInputValue('')
     }
   }
 
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id))
+  }
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ))
   }
 
   const handleKeyPress = (e) => {
@@ -37,7 +43,12 @@ function App() {
       </div>
       <ul className="todo-list">
         {todos.map(todo => (
-          <li key={todo.id}>
+          <li key={todo.id} className={todo.completed ? 'completed' : ''}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleTodo(todo.id)}
+            />
             <span>{todo.text}</span>
             <button onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
